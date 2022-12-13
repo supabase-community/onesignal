@@ -1,8 +1,7 @@
 import { serve } from 'https://deno.land/std@0.131.0/http/server.ts'
 import * as OneSignal from 'https://esm.sh/@onesignal/node-onesignal@1.0.0-beta7'
 
-const generateMessage = (amount: number, currency: string) =>
-  `You just spent ${amount / 100} ${(currency as string).toUpperCase()}.`
+  
 
 const _OnesignalAppId_ = Deno.env.get('ONESIGNAL_APP_ID')!
 const _OnesignalUserAuthKey_ = Deno.env.get('USER_AUTH_KEY')!
@@ -23,7 +22,7 @@ serve(async (req) => {
     notification.app_id = _OnesignalAppId_
     notification.include_external_user_ids = [record.user_id]
     notification.contents = {
-      en: generateMessage(record.amount, record.currency),
+      en: `You just spent $${record.price}!`,
     }
     const onesignalApiRes = await onesignal.createNotification(notification)
 
