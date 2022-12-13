@@ -61,20 +61,26 @@ const Home: NextPage = () => {
           <div>
             <button
               onClick={submitOrder}
-              className="py-1 px-4 text-lg bg-blue-400"
+              className="py-1 px-4 text-lg bg-green-400 rounded"
             >
-              Order
+              Place Order
             </button>
           </div>
         ) : (
-          <div className="flex flex-col space-y-2">
-            <form onSubmit={sendMagicLink}>
-              <input type="email" name="email" placeholder="Email" />
-              <button type="submit" className="py-1 px-4 text-lg bg-blue-400">
-                Send Magic Link
-              </button>
-            </form>
-          </div>
+          <form className="flex flex-col space-y-2" onSubmit={sendMagicLink}>
+            <input
+              className="border-green-300 border rounded p-2"
+              type="email"
+              name="email"
+              placeholder="Email"
+            />
+            <button
+              type="submit"
+              className="py-1 px-4 text-lg bg-green-400 rounded"
+            >
+              Send Magic Link
+            </button>
+          </form>
         )}
       </main>
     </>
