@@ -5,6 +5,7 @@
     ├── supabase    # Supabase directory containing functions to send push notifications
     └── README.md
 
+- Create a OneSignal app with Custom Code Setup
 - Rename `app/.env.example` to `app/.env.local` and add your Supabase URL, Anon Key, and OneSignal App ID.
 - Run `supabase link --project-ref YOUR_SUPABASE_PROJECT_REF` to link the edge functions to your Supabase project
 - Set environment variables for edge functions
@@ -13,7 +14,7 @@
   - Run `supabase secrets set --env-file ./supabase/.env`
 - Deploy the `notify` edge function by running `supabase functions deploy notify --no-verify-jwt`
 - Run the SQL below to create the `orders` table
-- Create a OneSignal app with Custom Code Setup
+- Setup Database Webhooks to call the edge function when a new row is inserted into `orders` table
 
 ```sql
 create table if not exists public.orders (
