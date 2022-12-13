@@ -10,8 +10,6 @@ const oneSignalAppId = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// declare var OneSignal: InitialData;
-
 const Home: NextPage = () => {
   const [user, setUser] = useState<User | null>(null)
 
@@ -28,8 +26,6 @@ const Home: NextPage = () => {
 
         allowLocalhostAsSecureOrigin: true,
       })
-
-      console.log('OneSignal initialized')
     }
 
     initialize()
