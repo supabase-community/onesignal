@@ -2,28 +2,45 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
+import OneSignal from 'react-onesignal'
 
-export const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-export const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const oneSignalAppId = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// declare var OneSignal: InitialData;
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const getInitialUser = async () => {
+    const initialize = async () => {
       const initialUser = await supabase.auth.getUser()
       setUser(initialUser?.data.user ?? null)
+
+      await OneSignal.init({
+        appId: oneSignalAppId,
+        notifyButton: {
+          enable: true,
+        },
+
+        allowLocalhostAsSecureOrigin: true,
+      })
+
+      console.log('OneSignal initialized')
     }
 
-    getInitialUser()
+    initialize()
 
     const authListener = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
     })
 
-    return () => authListener.data.subscription.unsubscribe()
+    return () => {
+      authListener.data.subscription.unsubscribe()
+    }
   }, [])
 
   const sendMagicLink = async (event: React.FormEvent<HTMLFormElement>) => {

@@ -8,6 +8,8 @@
 - Rename `.env.example` to `.env.local` and add your Supabase URL and Anon Key.
 - Run the SQL below to create the `orders` table
 - Deploy the `notify` edge function by running `supabase functions deploy notify`
+- Create a OneSignal app with Custom Code Setup
+  - Place the downloaded worker file under public
 
 ```sql
 create table if not exists public.orders (
