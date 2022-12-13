@@ -13,26 +13,46 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey)
 const Home: NextPage = () => {
   const [user, setUser] = useState<User | null>(null)
 
+  const [oneSignalInitialized, setOneSignalInitialized] =
+    useState<boolean>(false)
+
+  const initializeOneSignal = async (uid: string) => {
+    if (oneSignalInitialized) {
+      return
+    }
+    setOneSignalInitialized(true)
+    await OneSignal.init({
+      appId: oneSignalAppId,
+      notifyButton: {
+        enable: true,
+      },
+
+      allowLocalhostAsSecureOrigin: true,
+    })
+
+    await OneSignal.setExternalUserId(uid)
+  }
+
   useEffect(() => {
     const initialize = async () => {
-      const initialUser = await supabase.auth.getUser()
-      setUser(initialUser?.data.user ?? null)
-
-      await OneSignal.init({
-        appId: oneSignalAppId,
-        notifyButton: {
-          enable: true,
-        },
-
-        allowLocalhostAsSecureOrigin: true,
-      })
+      const initialUser = (await supabase.auth.getUser())?.data.user
+      setUser(initialUser ?? null)
+      if (initialUser) {
+        initializeOneSignal(initialUser.id)
+      }
     }
 
     initialize()
 
-    const authListener = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
+    const authListener = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        const user = session?.user ?? null
+        setUser(user)
+        if (user) {
+          initializeOneSignal(user.id)
+        }
+      }
+    )
 
     return () => {
       authListener.data.subscription.unsubscribe()
@@ -76,7 +96,7 @@ const Home: NextPage = () => {
               onClick={submitOrder}
               className="py-1 px-4 text-lg bg-green-400 rounded"
             >
-              Place Order
+              Place an Order
             </button>
           </div>
         ) : (
