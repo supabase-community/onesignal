@@ -1,8 +1,6 @@
 import { serve } from 'https://deno.land/std@0.131.0/http/server.ts'
 import * as OneSignal from 'https://esm.sh/@onesignal/node-onesignal@1.0.0-beta7'
 
-  
-
 const _OnesignalAppId_ = Deno.env.get('ONESIGNAL_APP_ID')!
 const _OnesignalUserAuthKey_ = Deno.env.get('USER_AUTH_KEY')!
 const _OnesignalRestApiKey_ = Deno.env.get('ONESIGNAL_REST_API_KEY')!

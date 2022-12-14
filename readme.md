@@ -1,5 +1,9 @@
 # OneSignal Next.js Push Notification Example
 
+Simple app to demonstrate how you can use OneSignal with your Supabase project to send push notifications when a new data is inserted in your database.
+
+![](https://raw.githubusercontent.com/supabase-community/onesignal/main/assets/screenshot.png)
+
     .
     ├── app         # Next.js app to place orders from
     ├── supabase    # Supabase directory containing functions to send push notifications
@@ -14,7 +18,7 @@
   - Run `supabase secrets set --env-file ./supabase/.env`
 - Deploy the `notify` edge function by running `supabase functions deploy notify --no-verify-jwt`
 - Run the SQL below to create the `orders` table
-- Setup Database Webhooks to call the edge function when a new row is inserted into `orders` table
+- Setup [Database Webhooks](https://supabase.com/docs/guides/database/webhooks) to call the edge function when a new row is inserted into `orders` table
 
 ```sql
 create table if not exists public.orders (
