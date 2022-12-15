@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient, User } from '@supabase/supabase-js'
+import { createClient, User } from '@supabase/supabase-js'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
@@ -16,6 +16,10 @@ const Home: NextPage = () => {
   const [oneSignalInitialized, setOneSignalInitialized] =
     useState<boolean>(false)
 
+  /**
+   * Initializes OneSignal SDK for a given Supabase User ID
+   * @param uid Supabase User ID
+   */
   const initializeOneSignal = async (uid: string) => {
     if (oneSignalInitialized) {
       return
@@ -31,6 +35,33 @@ const Home: NextPage = () => {
     })
 
     await OneSignal.setExternalUserId(uid)
+  }
+
+  const sendMagicLink = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const { email } = Object.fromEntries(new FormData(event.currentTarget))
+    if (typeof email !== 'string') return
+
+    const { error } = await supabase.auth.signInWithOtp({ email })
+    if (error) {
+      alert(error.message)
+    } else {
+      alert('Check your email inbox')
+    }
+  }
+
+  // Place a order with the selected price
+  const submitOrder = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const { price } = Object.fromEntries(new FormData(event.currentTarget))
+    if (typeof price !== 'string') return
+
+    const { error } = await supabase
+      .from('orders')
+      .insert({ price: Number(price) })
+    if (error) {
+      alert(error.message)
+    }
   }
 
   useEffect(() => {
@@ -58,33 +89,6 @@ const Home: NextPage = () => {
       authListener.data.subscription.unsubscribe()
     }
   }, [])
-
-  const sendMagicLink = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const { email } = Object.fromEntries(new FormData(event.currentTarget))
-    if (typeof email !== 'string') return
-
-    const { error } = await supabase.auth.signInWithOtp({ email })
-    if (error) {
-      alert(error.message)
-    } else {
-      alert('Check your email inbox')
-    }
-  }
-
-  // Create a order with price of $100
-  const submitOrder = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const { price } = Object.fromEntries(new FormData(event.currentTarget))
-    if (typeof price !== 'string') return
-
-    const { error } = await supabase
-      .from('orders')
-      .insert({ price: Number(price) })
-    if (error) {
-      alert(error.message)
-    }
-  }
 
   return (
     <>
