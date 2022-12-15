@@ -73,10 +73,14 @@ const Home: NextPage = () => {
   }
 
   // Create a order with price of $100
-  const submitOrder = async () => {
-    const { error } = await supabase.from('orders').insert({
-      price: 100,
-    })
+  const submitOrder = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const { price } = Object.fromEntries(new FormData(event.currentTarget))
+    if (typeof price !== 'string') return
+
+    const { error } = await supabase
+      .from('orders')
+      .insert({ price: Number(price) })
     if (error) {
       alert(error.message)
     }
@@ -89,20 +93,28 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex items-center justify-center min-h-screen">
+      <main className="flex items-center justify-center min-h-screen bg-black">
         {user ? (
-          <div>
+          <form className="flex flex-col space-y-2" onSubmit={submitOrder}>
+            <select
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded block p-2"
+              name="price"
+            >
+              <option value="100">$100</option>
+              <option value="200">$200</option>
+              <option value="300">$300</option>
+            </select>
             <button
-              onClick={submitOrder}
+              type="submit"
               className="py-1 px-4 text-lg bg-green-400 rounded"
             >
               Place an Order
             </button>
-          </div>
+          </form>
         ) : (
           <form className="flex flex-col space-y-2" onSubmit={sendMagicLink}>
             <input
-              className="border-green-300 border rounded p-2"
+              className="border-green-300 border rounded p-2 bg-transparent text-white"
               type="email"
               name="email"
               placeholder="Email"
