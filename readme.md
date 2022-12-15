@@ -1,15 +1,19 @@
 # OneSignal Next.js Push Notification Example
 
-Simple app to demonstrate how you can use OneSignal with your Supabase project to send push notifications when a new data is inserted in your database.
+Simple ordering app to demonstrate how you can use OneSignal with your Supabase project to send push notifications when a new data is inserted in your database.
 
-![](https://raw.githubusercontent.com/supabase-community/onesignal/main/assets/screenshot.png)
+You can find the full guide [here](https://supabase.com/docs/guides/integrations/onesignal).
+
+![Screenshot](https://raw.githubusercontent.com/supabase-community/onesignal/main/assets/screenshot.png)
 
     .
     ├── app         # Next.js app to place orders from
     ├── supabase    # Supabase directory containing functions to send push notifications
     └── README.md
 
-- Create a OneSignal app with Custom Code Setup
+## Get Started
+
+- Create a [OneSignal app with Custom Code Setup](https://documentation.onesignal.com/docs/web-push-custom-code-setup)
 - Rename `app/.env.example` to `app/.env.local` and add your Supabase URL, Anon Key, and OneSignal App ID.
 - Run `supabase link --project-ref YOUR_SUPABASE_PROJECT_REF` to link the edge functions to your Supabase project
 - Set environment variables for edge functions
