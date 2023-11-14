@@ -34,7 +34,7 @@ const Home: NextPage = () => {
       allowLocalhostAsSecureOrigin: true,
     })
 
-    await OneSignal.setExternalUserId(uid)
+    await OneSignal.login(uid)
   }
 
   const sendMagicLink = async (event: React.FormEvent<HTMLFormElement>) => {
